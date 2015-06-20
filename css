@@ -1,0 +1,220 @@
+body{
+    background-image: url(fondo2.png);
+    background-size: contain;
+    background-repeat: inherit;
+}
+
+img{
+    width: 200px;
+    height: 100px;
+}
+
+#valores{
+    
+    background-image: url(madera.png);
+    top: 100px;
+    width: 300px;
+    margin-top: 80px;
+    padding-left: 10px;
+    padding-top: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 10px 10px 10px silver;
+}
+
+.box{
+    
+    display: inline-block;
+    width: 200px;
+    height: 100px;
+    min-width: 200px;
+    min-height: 100px;
+    margin: 11px;
+    margin-right: 35px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px gold;
+    background-color: white;
+    border: 1px black solid;
+}
+
+#caja{
+    padding-top: 105px;
+    padding-left: 50px;
+    position: absolute;
+    top: 50px;
+    left: 380px;
+    overflow: auto;
+    height: 490px;
+    min-width: 780px;
+    min-height: 450px;
+    background-image: url(fondo.jpg);
+    background-size: contain;
+    border-style: solid;
+    border-width: 10px 10px 10px 10px;
+    -moz-border-image: url(borde.png) 52 66 61 67 repeat;
+    -webkit-border-image: url(borde.png) 52 66 61 67 repeat;
+    -o-border-image: url(borde.png) 52 66 61 67 repeat;
+    border-image: url(borde.png) 52 66 61 67 fill repeat;
+}
+
+#premios{
+    position: absolute;
+    background-image: url(madera.png);
+    padding-top: 40px;
+    padding-left: 40px;
+    overflow: auto;
+    width: 250px;
+    height: 550px;
+    top: 70px;
+    left: 1310px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    box-shadow: -10px 10px 10px silver;
+}
+
+#premios img{
+    width: 100px;
+    height: 50px;
+}
+
+#premios span{
+    font-family: "pixel";
+    font-size: 30px;
+    margin: 10px; 
+    color:azure;
+}
+
+.jugar{
+    font-family: "boton";
+    position: absolute;
+    top: 490px;
+    left: 315px;
+    width: 200px;
+    height: 100px;
+    background-color: coral;
+    font-size: xx-large;
+    color: white;
+    border: 2px white double;
+    border-radius: 5px;
+}
+
+.silenciar{
+    color: darkgoldenrod;
+    box-shadow: 5px 5px 5px silver;
+    margin:10px;
+    border: none;
+    border-radius: 10%;
+    background-color: ivory;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}
+
+.empezar{
+    color: darkgoldenrod;
+    box-shadow: 5px 5px 5px silver;
+    margin:10px;
+    border: none;
+    border-radius: 10%;
+    background-color: ivory;
+    position: absolute;
+    top: 0%;
+    left: 60px;
+}
+
+#creditos{  
+    font-family: "creditos";
+    font-size: 40px;
+    color: brown;
+    height: 60px;
+    width: 100px;
+    background-color: greenyellow
+}
+
+#premio{
+    font-family: "creditos";
+    font-size: 40px;
+    color: darkorange;
+}
+
+#bote{
+    font-family: "creditos";
+    font-size: 40px;
+    color: violet;
+    height: 60px;
+    width: 100px;
+}
+
+#juegos_disponibles{
+    font-family: "creditos";
+    color: red;
+    font-size: 40px;
+}
+
+.euro{
+    color: greenyellow;
+    font-size: 50px;
+}
+
+#valores h1{
+    font-family: "pixel";
+    color: azure;
+}
+
+#error{
+    font-size: 40px;
+    color: red;
+}
+
+.titulo{
+    font-family: "mortal";
+    position: absolute;
+    color: gold;
+    font-size: 50px;
+    z-index: 1;
+    top: 80px;
+    left: 590px;
+    width: 600px;
+}
+
+#comprobar{
+    color: white;
+}
+
+#pulsaciones{
+    color: white;
+}
+
+#figura{
+    color: white;
+}
+
+@font-face{
+    font-family: "mortal";
+    src: url("MK4.TTF");
+}
+
+@font-face{
+    font-family: "pixel";
+    src: url("mk2.TTF");
+}
+
+@font-face{
+    font-family: "boton";
+    src: url("mkmyth.ttf");
+}
+
+@font-face{
+    font-family: "creditos";
+    src: url("DIGITALDREAM.ttf");
+}
+
+.box:hover{
+    -webkit-animation: tiembla 0.1s 3;
+}
+
+@-webkit-keyframes tiembla{
+    0%  { -webkit-transform:rotateZ(-5deg); }
+    50% { -webkit-transform:rotateZ( 0deg) scale(.8); }
+    100%{ -webkit-transform:rotateZ( 5deg); }
+}
