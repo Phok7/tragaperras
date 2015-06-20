@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tragaperras</title>
+        <meta charset="windows-1252">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css.css" />
+        <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script>
+            // Variable con el premio del jugador
+            var premio_total = 0;
+            // Cantidad de dinero que tiene la máquina
+            var bote = 100;
+            // Cantidad de jugadas que introduce el jugador
+            var creditos = 0;
+            // Juegos disponibles del jugador
+            var juegos = 0;
+            // Para contar las partidas
+            var pulsaciones = 0;
+            var label_juegos;
+            var foto;
+            var array_premios;
+            var count = 0;
+
+
+            var audio = new Audio('jurassik.mp3');
+            var me_sobra = new Audio('me_sobra.mp3');
+            var risa = new Audio('risa.mp3');
+            audio.play();
+
+            function mostrar_inicio() {
+                document.getElementById('premio').innerHTML = premio_total.toFixed(2);
+                document.getElementById('bote').innerHTML = bote.toFixed(2);
+            }
+
+            function generar_array_aleatorio() {
+                var array = [];
+                for (var i = 0; i < 9; i++) {
+                    figura = Math.floor(Math.random() * 8) + 1;
+                    array[i] = parseInt(figura.toFixed(0));
+                }
+                return array;
+            }
+
+            function comprobar_columna1(array_premios) {
+                var bool = false;
+                if ((array_premios[0] === array_premios[1]) && (array_premios[1] === array_premios[2])) {
+                    bool = true;
+                }
+                return bool;
+            }
+
+            function comprobar_columna2(array_premios) {
+                var bool = false;
+                if ((array_premios[3] === array_premios[4]) && (array_premios[4] === array_premios[5])) {
+                    bool = true;
+                }
+                return bool;
+            }
+
+            function comprobar_columna3(array_premios) {
+                var bool = false;
+                if ((array_premios[6] === array_premios[7]) && (array_premios[7] === array_premios[8])) {
+                    bool = true;
+                }
+                return bool;
+            }
+            function comprobar_fila1(array_premios) {
+                var bool = false;
+                if ((array_premios[0] === array_premios[3]) && (array_premios[3] === array_premios[6])) {
+                    bool = true;
+                }
+                return bool;
+            }
+
+            function comprobar_fila2(array_premios) {
+                var bool = false;
+                if ((array_premios[1] === array_premios[4]) && (array_premios[4] === array_premios[7])) {
+                    bool = true;
+                }
+                return bool;
+            }
+
+            function comprobar_fila3(array_premios) {
+                var bool = false;
+                if ((array_premios[2] === array_premios[5]) && (array_premios[5] === array_premios[8])) {
+                    bool = true;
+                }
+                return bool;
+            }
+
+            function premio(numero) {
+                switch (numero) {
+                    case 1:
+                        return 0.2;
+                        break;
+                    case 2:
+                        return 0.5;
+                        break;
+                    case 3:
+                        return 1;
+                        break;
+                    case 4:
+                        return 2;
+                        break;
+                    case 5:
+                        return 3;
+                        break;
+                    case 6:
+                        return 4;
+                        break;
+                    case 7:
+                        return 10;
+                        break;
+                    case 8:
+                        return 20;
+                        break;
+                }
+            }
+
+            function fotos(numero) {
+                switch (numero) {
+                    case 1:
+                        foto = "<img src=\"cereza.png\">";
+                        return foto;
+                        break;
+                    case 2:
+                        foto = "<img src=\"sandia.png\">";
+                        return foto;
+                        break;
+                    case 3:
+                        foto = "<img src=\"manzana.png\">";
+                        return foto;
+                        break;
+                    case 4:
+                        foto = "<img src=\"limon.png\">";
+                        return foto;
+                        break;
+                    case 5:
+                        foto = "<img src=\"fresa.png\">";
+                        return foto;
+                        break;
+                    case 6:
+                        foto = "<img src=\"campana.png\">";
+                        return foto;
+                        break;
+                    case 7:
+                        foto = "<img src=\"siete.png\">";
+                        return foto;
+                        break;
+                    case 8:
+                        foto = "<img src=\"javascript.png\">";
+                        return foto;
+                        break;
+                }
+            }
+
+            function trampa(numero) {
+
+                var figura = numero;
+                var devolver = 0;
+
+//              Trampa para no dar premios si no tiene pasta la máquina.
+                if (bote >= 0 && bote < 0.5 + (0.5 * 0.3)) {
+                    do {
+                        devolver = Math.floor(Math.random() * 8) + 1;
+                        figura = devolver;
+                    } while (devolver === numero);
+                } else if (bote < 0.5 + (0.5 * 0.3)) {
+                    do {
+                        devolver = Math.floor(Math.random() * 8) + 1;
+                        figura = devolver;
+                    } while (devolver >= 2);
+                } else if (bote < 1 + (1 * 0.3)) {
+                    do {
+                        devolver = Math.floor(Math.random() * 8) + 1;
+                        figura = devolver;
+                    } while (devolver >= 3);
+                } else if (bote < 2 + (2 * 0.3)) {
+                    do {
+                        devolver = Math.floor(Math.random() * 8) + 1;
+                        figura = devolver;
+                    } while (devolver >= 4);
+                } else if (bote < 3 + (3 * 0.3)) {
+                    do {
+                        devolver = Math.floor(Math.random() * 8) + 1;
+                        figura = devolver;
+                    } while (devolver >= 5);
+                } else if (bote < 4 + (4 * 0.3)) {
+                    do {
+                        devolver = Math.floor(Math.random() * 8) + 1;
+                        figura = devolver;
+                    } while (devolver >= 6);
+                } else if (bote < 10 + (10 * 0.3) || premio_total < 30) {
+                    do {
+                        devolver = Math.floor(Math.random() * 8) + 1;
+                        figura = devolver;
+                    } while (devolver >= 7);
+                } else if (bote < 30 + (30 * 0.3) || premio_total < 40) {
+                    do {
+                        devolver = Math.floor(Math.random() * 8) + 1;
+                        figura = devolver;
+                    } while (devolver >= 8);
+                }
+                // Al contrario, para dar premios si ha jugado menos de 70 veces
+                if (bote > 0) {
+                    if (pulsaciones < 70) {
+                        if ((bote > 0.5 + (0.5 * 0.3)) && (pulsaciones < 10) && (premio_total < 10)) {
+                            if (figura <= 2)
+                                return figura;
+                        } else if ((bote > 1 + (1 * 0.3)) && (pulsaciones < 20) && (premio_total < 14)) {
+                            if (figura <= 3)
+                                return figura;
+                        } else if ((bote > 2 + (2 * 0.3)) && (pulsaciones < 30) && (premio_total < 16)) {
+                            if (figura <= 4)
+                                return figura;
+                        } else if ((bote > 3 + (3 * 0.3)) && (pulsaciones < 45) && (premio_total < 18)) {
+                            if (figura <= 5)
+                                return figura;
+                        } else if ((bote > 4 + (4 * 0.3)) && (pulsaciones < 60) && (premio_total < 20)) {
+                            if (figura <= 6)
+                                return figura;
+                        } else if ((bote > 10 + (10 * 0.3)) && (pulsaciones < 60) && (premio_total < 30)) {
+                            if (figura <= 7)
+                                return figura;
+                        }
+                    }
+                }
+                return figura;
+            }
+
+            function calcular_jugadas() {
+
+                creditos = document.getElementById('creditos').value;
+                label_juegos = document.getElementById('juegos_disponibles').innerHTML;
+
+                if (creditos > 0) {
+                    juegos = creditos / 0.2;
+                    if (parseInt(label_juegos) > 0) {
+                        juegos += parseInt(label_juegos);
+                    }
+                }
+
+                if (juegos < 1 && premio_total < 0.2) {
+                    document.getElementById('error').style.display = "block";
+                    document.getElementById('error').innerHTML = "No hay jugadas!!";
+                    if (pulsaciones > 0)
+                        risa.play();
+                } else {
+                    document.getElementById('juegos_disponibles').innerHTML = juegos;
+                    document.getElementById('error').style.display = "none";
+                    jugar();
+                }
+                document.getElementById('creditos').value = 0;
+            }
+
+            function temblar(bool) {
+                if (bool) {
+                    $('#caja').animate({
+                        left: "400px",
+                    }, 50);
+
+                    $("#caja").animate({
+                        left: "360px",
+                    }, 50);
+
+                    $("#caja").animate({
+                        left: "380px",
+                    }, 50);
+                }
+            }
+
+            function aumentar(premio) {
+                switch (premio) {
+                    case 1:
+                        me_sobra.play();
+                        $("#cereza").animate({
+                            width: '120px',
+                            height: '70px',
+                        });
+                        $("#cereza").animate({
+                            width: '100px',
+                            height: '50px',
+                        });
+                        break;
+                    case 2:
+                        me_sobra.play();
+                        $("#sandia").animate({
+                            width: '120px',
+                            height: '70px',
+                        });
+                        $("#sandia").animate({
+                            width: '100px',
+                            height: '50px',
+                        });
+                        break;
+                    case 3:
+                        me_sobra.play();
+                        $("#manzana").animate({
+                            width: '120px',
+                            height: '70px',
+                        });
+                        $("#manzana").animate({
+                            width: '100px',
+                            height: '50px',
+                        });
+                        break;
+                    case 4:
+                        me_sobra.play();
+                        $("#limon").animate({
+                            width: '120px',
+                            height: '70px',
+                        });
+                        $("#limon").animate({
+                            width: '100px',
+                            height: '50px',
+                        });
+                        break;
+                    case 5:
+                        me_sobra.play();
+                        $("#fresa").animate({
+                            width: '120px',
+                            height: '70px',
+                        });
+                        $("#fresa").animate({
+                            width: '100px',
+                            height: '50px',
+                        });
+                        break;
+                    case 6:
+                        me_sobra.play();
+                        $("#campana").animate({
+                            width: '120px',
+                            height: '70px',
+                        });
+                        $("#campana").animate({
+                            width: '100px',
+                            height: '50px',
+                        });
+                        break;
+                    case 7:
+                        me_sobra.play();
+                        $("#siete").animate({
+                            width: '120px',
+                            height: '70px',
+                        });
+                        $("#siete").animate({
+                            width: '100px',
+                            height: '50px',
+                        });
+                        break;
+                    case 8:
+                        me_sobra.play();
+                        $("#javascript").animate({
+                            width: '120px',
+                            height: '70px',
+                        });
+                        $("#javascript").animate({
+                            width: '100px',
+                            height: '50px',
+                        });
+                        break;
+                }
+            }
+
+            function silenciar() {
+                audio.pause();
+            }
+            function empezar() {
+                audio.play();
+            }
+
+            function jugar() {
+
+                //Suma 1 pulsación cada vez que se juega
+                pulsaciones++;
+                document.getElementById('pulsaciones').innerHTML = pulsaciones;
+                array_premios = generar_array_aleatorio();
+
+                bote += 0.2;
+                document.getElementById('bote').innerHTML = bote.toFixed(2);
+
+                if (juegos > 0) {
+                    juegos -= 1;
+                    document.getElementById('juegos_disponibles').innerHTML = juegos;
+                } else {
+                    premio_total -= 0.2;
+                    document.getElementById('premio').innerHTML = premio_total.toFixed(2);
+                }
+
+                function slot(numero, valor) {
+                    this.foto = fotos(parseInt(numero));
+                    this.valor = valor;
+                    this.id = numero;
+                }
+
+//**************** En este bloque se comprueba si hay algún premio, en caso de que halla riesgo de que se arruine la máquina,
+//**************** se usará otro número, si no, se deja el mismo número.
+
+    //                array_premios[0] = 7;
+    //                array_premios[1] = 7;
+    //                array_premios[2] = 7;
+    //                array_premios[3] = 7;
+    //                array_premios[4] = 7;
+    //                array_premios[5] = 7;
+
+                if (comprobar_columna1(array_premios)) {
+                    array_premios[2] = trampa(array_premios[2]);
+                }
+                if (comprobar_columna2(array_premios)) {
+                    array_premios[5] = trampa(array_premios[5]);
+                }
+                if (comprobar_columna3(array_premios)) {
+                    array_premios[8] = trampa(array_premios[8]);
+                }
+                if (comprobar_fila1(array_premios)) {
+                    array_premios[6] = trampa(array_premios[6]);
+                }
+                if (comprobar_fila2(array_premios)) {
+                    array_premios[7] = trampa(array_premios[7]);
+                }
+                if (comprobar_fila3(array_premios)) {
+                    array_premios[8] = trampa(array_premios[8]);
+                }
+
+                document.getElementById('comprobar').innerHTML = array_premios;
+
+                var a_1 = new slot(array_premios[0], premio(array_premios[0]));
+                var a_2 = new slot(array_premios[1], premio(array_premios[1]));
+                var a_3 = new slot(array_premios[2], premio(array_premios[2]));
+                var b_1 = new slot(array_premios[3], premio(array_premios[3]));
+                var b_2 = new slot(array_premios[4], premio(array_premios[4]));
+                var b_3 = new slot(array_premios[5], premio(array_premios[5]));
+                var c_1 = new slot(array_premios[6], premio(array_premios[6]));
+                var c_2 = new slot(array_premios[7], premio(array_premios[7]));
+                var c_3 = new slot(array_premios[8], premio(array_premios[8]));
+
+                array_premios.length = 0;
+                count = 0;
+
+                document.getElementById('rot_a_1').innerHTML = a_1.foto;
+                document.getElementById('rot_a_2').innerHTML = a_2.foto;
+                document.getElementById('rot_a_3').innerHTML = a_3.foto;
+                document.getElementById('rot_b_1').innerHTML = b_1.foto;
+                document.getElementById('rot_b_2').innerHTML = b_2.foto;
+                document.getElementById('rot_b_3').innerHTML = b_3.foto;
+                document.getElementById('rot_c_1').innerHTML = c_1.foto;
+                document.getElementById('rot_c_2').innerHTML = c_2.foto;
+                document.getElementById('rot_c_3').innerHTML = c_3.foto;
+
+                //******PREMIO FILAS**********
+
+                if ((document.getElementById('rot_a_1').innerHTML === document.getElementById('rot_b_1').innerHTML) &&
+                        (document.getElementById('rot_b_1').innerHTML === document.getElementById('rot_c_1').innerHTML)) {
+                    premio_total += a_1.valor;
+                    document.getElementById('premio').innerHTML = premio_total.toFixed(2);
+                    bote -= a_1.valor;
+                    document.getElementById('bote').innerHTML = bote.toFixed(2);
+                    temblar(true);
+                    aumentar(a_1.id);
+                    $('#rot_a_1').css('background', 'red');
+                    $('#rot_b_1').css('background', 'red');
+                    $('#rot_c_1').css('background', 'red');
+                    $('#rot_a_1').css('-moz-transition', 'all 2s');
+                    $('#rot_a_1').css('transition', 'all 2s');
+                    $('#rot_b_1').css('-moz-transition', 'all 2s');
+                    $('#rot_b_1').css('transition', 'all 2s');
+                    $('#rot_c_1').css('-moz-transition', 'all 2s');
+                    $('#rot_c_1').css('transition', 'all 2s');
+
+                } else {
+                    $('#rot_a_1').css('background', 'white');
+                    $('#rot_b_1').css('background', 'white');
+                    $('#rot_c_1').css('background', 'white');
+                }
+
+                if ((document.getElementById('rot_a_2').innerHTML === document.getElementById('rot_b_2').innerHTML) &&
+                        (document.getElementById('rot_b_2').innerHTML === document.getElementById('rot_c_2').innerHTML)) {
+                    premio_total += a_2.valor;
+                    document.getElementById('premio').innerHTML = premio_total.toFixed(2);
+                    bote -= a_2.valor;
+                    document.getElementById('bote').innerHTML = bote.toFixed(2);
+                    temblar(true);
+                    aumentar(a_2.id);
+                    $('#rot_a_2').css('background', 'red');
+                    $('#rot_b_2').css('background', 'red');
+                    $('#rot_c_2').css('background', 'red');
+                    $('#rot_a_2').css('-moz-transition', 'all 2s');
+                    $('#rot_a_2').css('transition', 'all 2s');
+                    $('#rot_b_2').css('-moz-transition', 'all 2s');
+                    $('#rot_b_2').css('transition', 'all 2s');
+                    $('#rot_c_2').css('-moz-transition', 'all 2s');
+                    $('#rot_c_2').css('transition', 'all 2s');
+                } else {
+                    $('#rot_a_2').css('background', 'white');
+                    $('#rot_b_2').css('background', 'white');
+                    $('#rot_c_2').css('background', 'white');
+                }
+
+                if ((document.getElementById('rot_a_3').innerHTML === document.getElementById('rot_b_3').innerHTML) &&
+                        (document.getElementById('rot_b_3').innerHTML === document.getElementById('rot_c_3').innerHTML)) {
+                    premio_total += a_3.valor;
+                    document.getElementById('premio').innerHTML = premio_total.toFixed(2);
+                    bote -= a_3.valor;
+                    document.getElementById('bote').innerHTML = bote.toFixed(2);
+                    temblar(true);
+                    aumentar(a_3.id);
+                    $('#rot_a_3').css('background', 'red');
+                    $('#rot_b_3').css('background', 'red');
+                    $('#rot_c_3').css('background', 'red');
+                    $('#rot_a_3').css('-moz-transition', 'all 2s');
+                    $('#rot_a_3').css('transition', 'all 2s');
+                    $('#rot_b_3').css('-moz-transition', 'all 2s');
+                    $('#rot_b_3').css('transition', 'all 2s');
+                    $('#rot_c_3').css('-moz-transition', 'all 2s');
+                    $('#rot_c_3').css('transition', 'all 2s');
+                } else {
+                    $('#rot_a_3').css('background', 'white');
+                    $('#rot_b_3').css('background', 'white');
+                    $('#rot_c_3').css('background', 'white');
+                }
+
+                //******PREMIO COLUMNAS**********
+
+                if ((document.getElementById('rot_a_1').innerHTML === document.getElementById('rot_a_2').innerHTML) &&
+                        (document.getElementById('rot_a_2').innerHTML === document.getElementById('rot_a_3').innerHTML)) {
+                    premio_total += a_1.valor;
+                    document.getElementById('premio').innerHTML = premio_total.toFixed(2);
+                    bote -= a_1.valor;
+                    document.getElementById('bote').innerHTML = bote.toFixed(2);
+                    temblar(true);
+                    aumentar(a_1.id);
+                    $('#rot_a_1').css('background', 'red');
+                    $('#rot_a_2').css('background', 'red');
+                    $('#rot_a_3').css('background', 'red');
+                    $('#rot_a_1').css('-moz-transition', 'all 2s');
+                    $('#rot_a_1').css('transition', 'all 2s');
+                    $('#rot_a_2').css('-moz-transition', 'all 2s');
+                    $('#rot_a_2').css('transition', 'all 2s');
+                    $('#rot_a_3').css('-moz-transition', 'all 2s');
+                    $('#rot_a_3').css('transition', 'all 2s');
+                } else {
+                    if (document.getElementById('rot_a_1').style.background !== 'red')
+                        $('#rot_a_1').css('background', 'white');
+                    if (document.getElementById('rot_a_2').style.background !== 'red')
+                        $('#rot_a_2').css('background', 'white');
+                    if (document.getElementById('rot_a_3').style.background !== 'red')
+                        $('#rot_a_3').css('background', 'white');
+                }
+
+                if ((document.getElementById('rot_b_1').innerHTML === document.getElementById('rot_b_2').innerHTML) &&
+                        (document.getElementById('rot_b_2').innerHTML === document.getElementById('rot_b_3').innerHTML)) {
+                    premio_total += b_1.valor;
+                    document.getElementById('premio').innerHTML = premio_total.toFixed(2);
+                    bote -= b_1.valor;
+                    document.getElementById('bote').innerHTML = bote.toFixed(2);
+                    temblar(true);
+                    aumentar(b_1.id);
+                    $('#rot_b_1').css('background', 'red');
+                    $('#rot_b_2').css('background', 'red');
+                    $('#rot_b_3').css('background', 'red');
+                    $('#rot_b_1').css('-moz-transition', 'all 2s');
+                    $('#rot_b_1').css('transition', 'all 2s');
+                    $('#rot_b_2').css('-moz-transition', 'all 2s');
+                    $('#rot_b_2').css('transition', 'all 2s');
+                    $('#rot_b_3').css('-moz-transition', 'all 2s');
+                    $('#rot_b_3').css('transition', 'all 2s');
+                } else {
+                    if (document.getElementById('rot_b_1').style.background !== 'red')
+                        $('#rot_b_1').css('background', 'white');
+                    if (document.getElementById('rot_b_2').style.background !== 'red')
+                        $('#rot_b_2').css('background', 'white');
+                    if (document.getElementById('rot_b_3').style.background !== 'red')
+                        $('#rot_b_3').css('background', 'white');
+                }
+
+                if ((document.getElementById('rot_c_1').innerHTML === document.getElementById('rot_c_2').innerHTML) &&
+                        (document.getElementById('rot_c_2').innerHTML === document.getElementById('rot_c_3').innerHTML)) {
+                    premio_total += c_1.valor;
+                    document.getElementById('premio').innerHTML = premio_total.toFixed(2);
+                    bote -= c_1.valor;
+                    document.getElementById('bote').innerHTML = bote.toFixed(2);
+                    temblar(true);
+                    aumentar(c_1.id);
+                    $('#rot_c_1').css('background', 'red');
+                    $('#rot_c_2').css('background', 'red');
+                    $('#rot_c_3').css('background', 'red');
+                    $('#rot_c_1').css('-moz-transition', 'all 2s');
+                    $('#rot_c_1').css('transition', 'all 2s');
+                    $('#rot_c_2').css('-moz-transition', 'all 2s');
+                    $('#rot_c_2').css('transition', 'all 2s');
+                    $('#rot_c_3').css('-moz-transition', 'all 2s');
+                    $('#rot_c_3').css('transition', 'all 2s');
+                } else {
+                    if (document.getElementById('rot_c_1').style.background !== 'red')
+                        $('#rot_c_1').css('background', 'white');
+                    if (document.getElementById('rot_c_2').style.background !== 'red')
+                        $('#rot_c_2').css('background', 'white');
+                    if (document.getElementById('rot_c_3').style.background !== 'red')
+                        $('#rot_c_3').css('background', 'white');
+                }
+            }
+
+        </script>
+    </head>
+    <body onload="mostrar_inicio()">
+
+        <div class="titulo">CASINO-MORTAL 2</div>
+        <!-- ********* FILA 1 ***********-->
+        <div id="caja">
+            <div id="rot_a_1" class="box">
+            </div>
+            <div id="rot_b_1" class="box">
+            </div>
+            <div id="rot_c_1" class="box">
+            </div><br/>
+
+            <!-- ********* FILA 2 ***********-->
+
+            <div id="rot_a_2" class="box">
+            </div>
+            <div id="rot_b_2" class="box">
+            </div>
+            <div id="rot_c_2" class="box">
+            </div><br/>
+
+            <!-- ********* FILA 3 ***********-->
+
+            <div id="rot_a_3" class="box"> 
+            </div>
+            <div id="rot_b_3" class="box">
+            </div>
+            <div id="rot_c_3" class="box">
+            </div><br/>
+            <input type="button" value="Jugar" onclick="calcular_jugadas()" class="jugar"/><br />
+        </div>
+
+        <div id="valores">
+            <h1>Premio:</h1>
+            <span id="premio"></span>
+            <h1>Jugadas: </h1>
+            <span id="juegos_disponibles">0</span><br/>
+            <h1>Bote: </h1>
+            <span id="bote"></span><br/><br/>
+            <input type="number" id="creditos" value="0"> <span class="euro">€</span><br/>
+            <span id="error"></span><br/>
+            <span id="comprobar"></span><br/>
+            <span id="pulsaciones"></span><br/>
+            <span id="premio_abs"></span><br/>
+
+        </div>
+
+        <div id="premios">
+            <img id="cereza" src="cereza.png"><span>20 cent</span>
+            <img id="sandia" src="sandia.png"><span>50 cent</span>
+            <img id="manzana" src="manzana.png"><span>1 €</span>
+            <img id="limon" src="limon.png"><span>2 €</span>
+            <img id="fresa" src="fresa.png"><span>3 €</span>
+            <img id="campana" src="campana.png"><span>4 €</span>
+            <img id="siete" src="siete.png"><span>10 €</span>
+            <img id="javascript" src="javascript.png"><span>20 €</span>
+        </div>
+        <input type="button" value="Play" onclick="empezar()" class="empezar"/><br />
+        <input type="button" value="Pause" onclick="silenciar()" class="silenciar"/><br />
+    </body>
+</html>
